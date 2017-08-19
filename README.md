@@ -1,3 +1,3 @@
-# Oishe.github.io
-[View github](https://github.com/oishe/)
-[Machine Learning Notes](https://oishefarhan.me/ML/)
+# oishefarhan.me
+[View github](https://github.com/oishe/)  
+[Machine Learning Notes](https://oishefarhan.me/ML/)  
