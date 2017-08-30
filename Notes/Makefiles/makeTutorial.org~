@@ -1,0 +1,66 @@
+#+TITLE:How to write Makefiles
+#+HTML_HEAD: 
+* Makefile - [[http://mrbook.org/blog/tutorials/make/][Online Tutorial]]
+** Source code compiling utility
++ ~make~ utility needed
++ manage multiple source code project
++ automatically build and compile updated code only
+** Make utility
+#+BEGIN_SRC
+make
+#+END_SRC
++ executes file named /makefile/ in current directory
+#+BEGIN_SRC
+make -f MyMakeFile
+#+END_SRC
++ executes specific makefile out of many makefiles
+#+BEGIN_SRC
+man make
+#+END_SRC
++ more info on other switches
+** Build Process
+1. Compiler compiles source files to object files
+2. Linker links object files to new executable
+* =project/=
+** Compiling by hand
+#+BEGIN_SRC 
+g++ main.cpp hello.cpp factorial.cpp -o hello
+#+END_SRC
+** Basic =makefile= structure
+#+BEGIN_SRC
+target: dependencies
+[tab] system command
+#+END_SRC
+** =Makefile-1=
+#+BEGIN_SRC
+all:
+    g++ main hello.cpp factorial.cpp -o hello
+#+END_SRC
+Run:
+#+BEGIN_SRC
+make -f Makefile-1
+#+END_SRC
++ =all:= is the default target if no other target exists
++ No dependencies in this case
++ compiles program according to the command line after target
+** =Makefile-2=
+#+BEGIN_SRC
+all: hello
+
+hello: main.o factorial.o hello.o
+    g++ main.o factorial.o hello.o -o hello
+
+main.o: main.cpp
+    g++ -c main.cpp
+
+factorial.o: factorial.cpp
+    g++ -c factorial.cpp
+
+hello.o: hello.cpp
+    g++ -c hello.cpp
+
+clean:
+    rm *o hello
+#+END_SRC
++ Using dependencies
+  + only sections where dependecy is changed gets re-compiled
