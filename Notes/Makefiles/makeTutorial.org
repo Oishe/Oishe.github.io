@@ -1,12 +1,35 @@
 #+TITLE:How to write ~makefiles~
 #+OPTIONS: toc:nil
 #+HTML_HEAD: <style> body{margin:5% 15%}</style>
-* Makefile - [[http://mrbook.org/blog/tutorials/make/][Online Tutorial]]
-** Source code compiling utility
+* [[./GNU%20make.html][Make Documentation]]
++ need to add TAB before command not SPACES
++ main goal is first target
+  + checks its dependencies
++ continuing multiple lines
+  + leave a \ at the end
++ single ('$') for dereferencig variabes
++ double ('$$') for passing single ('$') to shell
++ proper practices for cleaning to handle unanticipated situations
+#+BEGIN_SRC 
+.PHONY : clean
+clean :
+        -rm edit $(objects)
+#+END_SRC
++ = vs :=
+  + = supports recursive assign
+  + := literal assign (one time only)
++ [[./GNU%20make.html#Automatic-VariablesAutomatic][Automatic Variables]]
+| $@ | target                              |
+| $< | first prerequisite                  |
+| $? | all prerequisites newer than target |
+| $^ | all prerequisites                   |
+* [[http://mrbook.org/blog/tutorials/make/][Online Tutorial]]
+** Makefile 
+*** Source code compiling utility
 + ~make~ utility needed
 + manage multiple source code project
 + automatically build and compile updated code only
-** Make utility
+*** Make utility
 #+BEGIN_SRC
 make
 #+END_SRC
@@ -19,20 +42,20 @@ make -f MyMakeFile
 man make
 #+END_SRC
 + more info on other switches
-** Build Process
-1. Compiler compiles source files to object files
-2. Linker links object files to new executable
-* Example =./project/=
-** Compiling by hand
+*** Build Process
+1. compiler compiles source files to object files
+2. linker links object files to new executable
+** Example =./project/=
+*** Compiling by hand
 #+BEGIN_SRC 
 g++ main.cpp hello.cpp factorial.cpp -o hello
 #+END_SRC
-** Basic =./makefile= structure
+*** Basic makefile structure
 #+BEGIN_SRC
 target: dependencies
 [tab] system command
 #+END_SRC
-** =Makefile-1=
+*** Simple file =Makefile-1=
 #+BEGIN_SRC
 all:
     g++ main hello.cpp factorial.cpp -o hello
@@ -42,9 +65,9 @@ How to run:
 make -f Makefile-1
 #+END_SRC
 + =all:= is the default target if no other target exists
-+ No dependencies in this case
++ no dependencies in this case
 + compiles program according to the command line after target
-** =Makefile-2=
+*** Nested Dependencies =Makefile-2=
 #+BEGIN_SRC
 all: hello
 
@@ -63,7 +86,60 @@ hello.o: hello.cpp
 clean:
     rm *o hello
 #+END_SRC
-+ Using dependencies
++ using dependencies
   + only sections where dependency is changed gets re-compiled
   + nested dependency tree
-+ 
++ *NOTE:* clean seemed to fail if ~hello~ was included
+*** Variables =Makefile-3=
+#+BEGIN_SRC
+# I am a comment, and I want to say that the variable CC will be
+# the compiler to use.
+CC=g++
+# Hey!, I am comment number 2. I want to say that CFLAGS will be the
+# options I'll pass to the compiler.
+CFLAGS=-c -Wall
+
+all: hello
+
+hello: main.o factorial.o hello.o
+    $(CC) main.o factorial.o hello.o -o hello
+
+main.o: main.cpp
+    $(CC) $(CFLAGS) main.cpp
+
+factorial.o: factorial.cpp
+    $(CC) $(CFLAGS) factorial.cpp
+
+hello.o: hello.cpp
+    $(CC) $(CFLAGS) hello.cpp
+
+clean:
+    rm *o
+#+END_SRC
++ assign a value to a variable
++ use derefence operator to retreive value ~$(VAR)~
+*** More features =Makefile-4=
+#+BEGIN_SRC
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SOURCES=main.cpp hello.cpp factorial.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=hello
+
+all: $(SOURCES) $(EXECUTABLE)
+    
+$(EXECUTABLE): $(OBJECTS) 
+    $(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+    $(CC) $(CFLAGS) $< -o $@
+#+END_SRC
++ switching file type for variables
+  + =$(SOURCES:.cpp=.o)=
++ referencing the first prerequisite
+  + =$<=
++ referencing all prerequsites
+  + =$^$
++ referencing the target
+  + =$@=

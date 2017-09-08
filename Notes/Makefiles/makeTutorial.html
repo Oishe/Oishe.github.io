@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-08-30 Wed 11:42 -->
+<!-- 2017-08-31 Thu 20:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>How to write <code>makefiles</code></title>
@@ -226,16 +226,103 @@ for the JavaScript code in this tag.
  }
 /*]]>*///-->
 </script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content">
 <h1 class="title">How to write <code>makefiles</code></h1>
-<div id="outline-container-org7ff3fa7" class="outline-2">
-<h2 id="org7ff3fa7"><span class="section-number-2">1</span> Makefile - <a href="http://mrbook.org/blog/tutorials/make/">Online Tutorial</a></h2>
+<div id="outline-container-orgc7db90b" class="outline-2">
+<h2 id="orgc7db90b"><span class="section-number-2">1</span> <a href="./GNU%20make.html">Make Documentation</a></h2>
 <div class="outline-text-2" id="text-1">
-</div><div id="outline-container-org71ad631" class="outline-3">
-<h3 id="org71ad631"><span class="section-number-3">1.1</span> Source code compiling utility</h3>
-<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>need to add TAB before command not SPACES</li>
+<li>main goal is first target
+<ul class="org-ul">
+<li>checks its dependencies</li>
+</ul></li>
+<li>continuing multiple lines
+<ul class="org-ul">
+<li>leave a \ at the end</li>
+</ul></li>
+<li>single ('$') for dereferencig variabes</li>
+<li>double ('$$') for passing single ('$') to shell</li>
+<li>proper practices for cleaning to handle unanticipated situations</li>
+</ul>
+<pre class="example">
+.PHONY : clean
+clean :
+	-rm edit $(objects)
+</pre>
+<ul class="org-ul">
+<li>= vs :=
+<ul class="org-ul">
+<li>= supports recursive assign</li>
+<li>:= literal assign (one time only)</li>
+</ul></li>
+<li><a href="./GNU%20make.html#Automatic-VariablesAutomatic">Automatic Variables</a></li>
+</ul>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">$@</td>
+<td class="org-left">target</td>
+</tr>
+
+<tr>
+<td class="org-left">$&lt;</td>
+<td class="org-left">first prerequisite</td>
+</tr>
+
+<tr>
+<td class="org-left">$?</td>
+<td class="org-left">all prerequisites newer than target</td>
+</tr>
+
+<tr>
+<td class="org-left">$^</td>
+<td class="org-left">all prerequisites</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org909b987" class="outline-2">
+<h2 id="org909b987"><span class="section-number-2">2</span> <a href="http://mrbook.org/blog/tutorials/make/">Online Tutorial</a></h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgcb0ac17" class="outline-3">
+<h3 id="orgcb0ac17"><span class="section-number-3">2.1</span> Makefile</h3>
+<div class="outline-text-3" id="text-2-1">
+</div><div id="outline-container-org81158f9" class="outline-4">
+<h4 id="org81158f9"><span class="section-number-4">2.1.1</span> Source code compiling utility</h4>
+<div class="outline-text-4" id="text-2-1-1">
 <ul class="org-ul">
 <li><code>make</code> utility needed</li>
 <li>manage multiple source code project</li>
@@ -243,9 +330,9 @@ for the JavaScript code in this tag.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb67dad7" class="outline-3">
-<h3 id="orgb67dad7"><span class="section-number-3">1.2</span> Make utility</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgac2d903" class="outline-4">
+<h4 id="orgac2d903"><span class="section-number-4">2.1.2</span> Make utility</h4>
+<div class="outline-text-4" id="text-2-1-2">
 <pre class="example">
 make
 </pre>
@@ -266,39 +353,39 @@ man make
 </ul>
 </div>
 </div>
-<div id="outline-container-org04f9b83" class="outline-3">
-<h3 id="org04f9b83"><span class="section-number-3">1.3</span> Build Process</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-org335c1a9" class="outline-4">
+<h4 id="org335c1a9"><span class="section-number-4">2.1.3</span> Build Process</h4>
+<div class="outline-text-4" id="text-2-1-3">
 <ol class="org-ol">
-<li>Compiler compiles source files to object files</li>
-<li>Linker links object files to new executable</li>
+<li>compiler compiles source files to object files</li>
+<li>linker links object files to new executable</li>
 </ol>
 </div>
 </div>
 </div>
-<div id="outline-container-org803562f" class="outline-2">
-<h2 id="org803562f"><span class="section-number-2">2</span> Example <code>./project/</code></h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-org644360b" class="outline-3">
-<h3 id="org644360b"><span class="section-number-3">2.1</span> Compiling by hand</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgfaf859b" class="outline-3">
+<h3 id="orgfaf859b"><span class="section-number-3">2.2</span> Example <code>./project/</code></h3>
+<div class="outline-text-3" id="text-2-2">
+</div><div id="outline-container-org225c45b" class="outline-4">
+<h4 id="org225c45b"><span class="section-number-4">2.2.1</span> Compiling by hand</h4>
+<div class="outline-text-4" id="text-2-2-1">
 <pre class="example">
 g++ main.cpp hello.cpp factorial.cpp -o hello
 </pre>
 </div>
 </div>
-<div id="outline-container-org7b2d448" class="outline-3">
-<h3 id="org7b2d448"><span class="section-number-3">2.2</span> Basic <code>./makefile</code> structure</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-org331ae84" class="outline-4">
+<h4 id="org331ae84"><span class="section-number-4">2.2.2</span> Basic makefile structure</h4>
+<div class="outline-text-4" id="text-2-2-2">
 <pre class="example">
 target: dependencies
 [tab] system command
 </pre>
 </div>
 </div>
-<div id="outline-container-org2665d73" class="outline-3">
-<h3 id="org2665d73"><span class="section-number-3">2.3</span> <code>Makefile-1</code></h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-org587ca82" class="outline-4">
+<h4 id="org587ca82"><span class="section-number-4">2.2.3</span> Simple file <code>Makefile-1</code></h4>
+<div class="outline-text-4" id="text-2-2-3">
 <pre class="example">
 all:
     g++ main hello.cpp factorial.cpp -o hello
@@ -311,14 +398,14 @@ make -f Makefile-1
 </pre>
 <ul class="org-ul">
 <li><code>all:</code> is the default target if no other target exists</li>
-<li>No dependencies in this case</li>
+<li>no dependencies in this case</li>
 <li>compiles program according to the command line after target</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org3dfc262" class="outline-3">
-<h3 id="org3dfc262"><span class="section-number-3">2.4</span> <code>Makefile-2</code></h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-org27d4f72" class="outline-4">
+<h4 id="org27d4f72"><span class="section-number-4">2.2.4</span> Nested Dependencies <code>Makefile-2</code></h4>
+<div class="outline-text-4" id="text-2-2-4">
 <pre class="example">
 all: hello
 
@@ -338,20 +425,94 @@ clean:
     rm *o hello
 </pre>
 <ul class="org-ul">
-<li>Using dependencies
+<li>using dependencies
 <ul class="org-ul">
 <li>only sections where dependency is changed gets re-compiled</li>
 <li>nested dependency tree</li>
 </ul></li>
-<li></li>
+<li><b>NOTE:</b> clean seemed to fail if <code>hello</code> was included</li>
 </ul>
+</div>
+</div>
+<div id="outline-container-orgba9bade" class="outline-4">
+<h4 id="orgba9bade"><span class="section-number-4">2.2.5</span> Variables <code>Makefile-3</code></h4>
+<div class="outline-text-4" id="text-2-2-5">
+<pre class="example">
+# I am a comment, and I want to say that the variable CC will be
+# the compiler to use.
+CC=g++
+# Hey!, I am comment number 2. I want to say that CFLAGS will be the
+# options I'll pass to the compiler.
+CFLAGS=-c -Wall
+
+all: hello
+
+hello: main.o factorial.o hello.o
+    $(CC) main.o factorial.o hello.o -o hello
+
+main.o: main.cpp
+    $(CC) $(CFLAGS) main.cpp
+
+factorial.o: factorial.cpp
+    $(CC) $(CFLAGS) factorial.cpp
+
+hello.o: hello.cpp
+    $(CC) $(CFLAGS) hello.cpp
+
+clean:
+    rm *o
+</pre>
+<ul class="org-ul">
+<li>assign a value to a variable</li>
+<li>use derefence operator to retreive value <code>$(VAR)</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org116f3d8" class="outline-4">
+<h4 id="org116f3d8"><span class="section-number-4">2.2.6</span> More features <code>Makefile-4</code></h4>
+<div class="outline-text-4" id="text-2-2-6">
+<pre class="example">
+CC=g++
+CFLAGS=-c -Wall
+LDFLAGS=
+SOURCES=main.cpp hello.cpp factorial.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=hello
+
+all: $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS) 
+    $(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+    $(CC) $(CFLAGS) $&lt; -o $@
+</pre>
+<ul class="org-ul">
+<li>switching file type for variables
+<ul class="org-ul">
+<li><code>$(SOURCES:.cpp</code>.o)=</li>
+</ul></li>
+<li>referencing the first prerequisite
+<ul class="org-ul">
+<li><code>$&lt;</code></li>
+</ul></li>
+<li>referencing all prerequsites
+<ul class="org-ul">
+<li>=\(^\)</li>
+</ul></li>
+<li>referencing the target
+<ul class="org-ul">
+<li><code>$@</code></li>
+</ul></li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Oishe</p>
-<p class="date">Created: 2017-08-30 Wed 11:42</p>
+<p class="date">Created: 2017-08-31 Thu 20:56</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
